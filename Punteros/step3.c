@@ -1,3 +1,6 @@
+// Compilar  gcc step3.c -o step3
+// Ejecutar ./step3
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,6 +9,7 @@ struct student {
     char name[10];
     int age;
     int score;
+    //char array[5];
 };
 
 void print_student(struct student s) {
@@ -16,7 +20,7 @@ void main() {
     struct student s1;
     s1.age = 20;
     s1.score = 100;
-    strcpy(s1.name, "NathaliAlfa");
+    strcpy(s1.name, "Nathaliezzzz");
 
     print_student(s1);
     printf("Tamaño de s1: %zu\n", sizeof(s1));

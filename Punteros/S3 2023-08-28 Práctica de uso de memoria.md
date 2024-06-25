@@ -1193,6 +1193,15 @@ En este curso nadie se llama María (ya revisé en Mediación Virtual). Coloquen
 su nombre completo (con apellidos) en la línea que ejecuta la función `strcpy`
 y compilen el programa. Reporten qué sucede.
 
+No cabe el nombre completo.
+
+step3.c: In function ‘main’:
+step3.c:21:5: warning: ‘__builtin_memcpy’ writing 22 bytes into a region of size 20 overflows the destination [-Wstringop-overflow=]
+   21 |     strcpy(s1.name, "NathalieAlfaroQuesada");
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+step3.c:18:20: note: destination object ‘s1’ of size 20
+   18 |     struct student s1;
+
 El compilador es lo suficientemente inteligente para saber que estamos haciendo
 algo mal. Típicamente uno debería ir a arreglar este error, pero no en esta
 práctica.
@@ -1207,12 +1216,12 @@ Ahora, vuelvan a compilar el programa, pero esta vez deshabiliten Stack Smashing
 Protection, usando el flag: `-fno-stack-protector`. Corran el programa y reporten
 qué errores observan. ¿Qué edad y qué nota tienen?
 
-In function ‘main’:
-step3.c:19:5: warning: ‘__builtin_memcpy’ writing 24 bytes into a region of size 20 overflows the destination [-Wstringop-overflow=]
-   19 |     strcpy(s1.name, "Nathalie Alfaro Quesada");
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-step3.c:16:20: note: destination object ‘s1’ of size 20
-   16 |     struct student s1;
+step3.c: In function ‘main’:
+step3.c:21:5: warning: ‘__builtin_memcpy’ writing 22 bytes into a region of size 20 overflows the destination [-Wstringop-overflow=]
+   21 |     strcpy(s1.name, "NathalieAlfaroQuesada");
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+step3.c:18:20: note: destination object ‘s1’ of size 20
+   18 |     struct student s1;
 
 Lo que sucedió es que al hacer la copia de su nombre esta sobreescribió otros
 valores, como la edad y la nota. Pero noten que quizá el programa no falló:
@@ -1226,21 +1235,49 @@ a crear código más seguro, ya que este tipo de errores pueden ser usados para 
 control de la máquina por parte de un usuario malicioso.
 
 Corran el programa usando Valgrind (`valgrind ./step3`). ¿Qué error reporta?
-leo algo que no inicialice
+
+==369668== Memcheck, a memory error detector
+==369668== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==369668== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==369668== Command: ./step3
+==369668== 
+name: NathalieAlfaroQuesa, age: 1968271218, score: 6386533
+Tamaño de s1: 20
+Tamaño de int: 4
+Tamaño de char[10]: 10
+==369668== 
+==369668== HEAP SUMMARY:
+==369668==     in use at exit: 0 bytes in 0 blocks
+==369668==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==369668== 
+==369668== All heap blocks were freed -- no leaks are possible
+==369668== 
+==369668== For lists of detected and suppressed errors, rerun with: -s
+==369668== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 
 Modifiquen el programa para que el nombre mida menos de 20 caracteres (por ejemplo,
 12 caracteres). Compilen y ejecuten el programa con Valgrind. ¿Muestra el mismo
 error al correrlo con Valgrind? ¿Su compilador mostró algún warning esta vez?
 ¿Qué edad tienen?
-no tira error porque lo que sobreescribe es parte del struct
-HEAP SUMMARY:
-==38404==     in use at exit: 0 bytes in 0 blocks
-==38404==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
-==38404== 
-==38404== All heap blocks were freed -- no leaks are possible
-==38404== 
-==38404== For lists of detected and suppressed errors, rerun with: -s
-==38404== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+==370055== Memcheck, a memory error detector
+==370055== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==370055== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==370055== Command: ./step3
+==370055== 
+name: Nathaliezzzz, age: 0, score: 100
+Tamaño de s1: 20
+Tamaño de int: 4
+Tamaño de char[10]: 10
+==370055== 
+==370055== HEAP SUMMARY:
+==370055==     in use at exit: 0 bytes in 0 blocks
+==370055==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==370055== 
+==370055== All heap blocks were freed -- no leaks are possible
+==370055== 
+==370055== For lists of detected and suppressed errors, rerun with: -s
+==370055== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 
 Como pueden observar, es increiblemente fácil producir un buffer overflow. Y
 este último error no puede ser detectado ni por el compilador ni por herramientas

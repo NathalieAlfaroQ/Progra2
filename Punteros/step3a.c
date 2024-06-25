@@ -1,3 +1,6 @@
+// Compilar gcc step3a.c -o step3a
+// Ejecutar ./step3a
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
