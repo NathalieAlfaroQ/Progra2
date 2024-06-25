@@ -1,3 +1,6 @@
+// Compilar: gcc step2b.c -o step2b
+// Ejecutar: ./step2b
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,14 +19,14 @@ void print_student(struct student* s) {
 
 void main() {
     struct student* s1 = malloc(sizeof(struct student));
-    s1->age = 20;
-    s1->score = 100;
     strcpy(s1->name, "Maria");
 
     printf("Tamaño de *s1: %zu\n", sizeof(*s1));
     print_student(s1);
-    print_student(s1);
     free(s1);   
+    s1->age = 20;
+    s1->score = 100;
+    print_student(s1);
 
     printf("Tamaño de s1: %zu\n", sizeof(s1));
     printf("Tamaño de int: %zu\n", sizeof(int));

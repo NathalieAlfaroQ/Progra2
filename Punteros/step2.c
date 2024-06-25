@@ -1,3 +1,6 @@
+// Compilar: gcc step2.c -o step2
+// Ejecutar: ./step2
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,8 +25,8 @@ void main() {
 
     printf("Tamaño de *s1: %zu\n", sizeof(*s1));
     print_student(s1);
+   s1 = NULL;//puntero de s1 apunta a null
     print_student(s1);
-    s1 = NULL;//puntero de s1 apunta a null
 
     printf("Tamaño de s1: %zu\n", sizeof(s1));
 
@@ -33,7 +36,7 @@ void main() {
     /*Tamaño de *s1: 20
 name: Maria, age: 20, score: 100
 Segmentation fault*/
-    free(s1);
-    
+   // free(s1);
+   printf("%p\n", s1);
 }
 
